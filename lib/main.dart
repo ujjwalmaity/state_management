@@ -58,10 +58,14 @@ class MyText extends StatelessWidget {
 class MyTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return TextField(
-      textAlign: TextAlign.center,
-      onChanged: (value) {
-        Provider.of<Data>(context, listen: false).changeData(value);
+    return Consumer<Data>(
+      builder: (context, myData, child) {
+        return TextField(
+          textAlign: TextAlign.center,
+          onChanged: (value) {
+            myData.changeData(value);
+          },
+        );
       },
     );
   }
