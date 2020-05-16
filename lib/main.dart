@@ -4,16 +4,14 @@ import 'package:provider/provider.dart';
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
-  final String data = 'Top Secret data';
-
   @override
   Widget build(BuildContext context) {
-    return Provider<String>(
-      create: (context) => data,
+    return ChangeNotifierProvider<Data>(
+      create: (context) => Data(),
       child: MaterialApp(
         home: Scaffold(
           appBar: AppBar(
-            title: Text(data),
+            title: MyText(),
           ),
           body: Level1(),
         ),
@@ -36,7 +34,7 @@ class Level2 extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        Container(),
+        MyTextField(),
         Level3(),
       ],
     );
@@ -46,6 +44,34 @@ class Level2 extends StatelessWidget {
 class Level3 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Text(Provider.of<String>(context));
+    return Text(Provider.of<Data>(context).data);
+  }
+}
+
+class MyText extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Text(Provider.of<Data>(context, listen: false).data);
+  }
+}
+
+class MyTextField extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+      textAlign: TextAlign.center,
+      onChanged: (value) {
+        Provider.of<Data>(context, listen: false).changeData(value);
+      },
+    );
+  }
+}
+
+class Data extends ChangeNotifier {
+  String data = 'Some data';
+
+  void changeData(String value) {
+    data = value;
+    notifyListeners();
   }
 }
